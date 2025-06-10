@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 #display content of current directory where only the part of the name after the first dash is displayed
 for file in *; do
-	echo "$file" | grep -q '-' && echo "$file" | cut -d '-' -f2-
+	echo "${file#*-}"
 done

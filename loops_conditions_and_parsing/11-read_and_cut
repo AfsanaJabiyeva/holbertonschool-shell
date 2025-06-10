@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#Bash script that displays the content of the file /etc/passwd
+while IFS=: read user shadow uid guid geco home sh; do if [[ $uid -le 100 ]]; then echo $user $home; fi; done < /etc/passwd
+
