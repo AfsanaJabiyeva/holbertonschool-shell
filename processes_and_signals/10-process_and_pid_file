@@ -2,10 +2,13 @@
 #process and pid file
 
 
-
 PIDFILE="/var/run/myscript.pid"
-echo $$ > "$PIDFILE"
 
+
+if ! touch "$PIDFILE" 2>/dev/null; then
+    PIDFILE="/tmp/myscript.pid"
+fi
+echo $$ > "$PIDFILE"
 handle_sigterm() {
     echo "I hate the kill command"
     cleanup_and_exit
@@ -24,14 +27,12 @@ cleanup_and_exit() {
     exit 0
 }
 
+
 trap handle_sigterm SIGTERM
 trap handle_sigint SIGINT
 trap handle_sigquit SIGQUIT
 
-
 while true; do
     echo "To infinity and beyond"
-    sleep 2
+    sleep 1
 done
-
-
