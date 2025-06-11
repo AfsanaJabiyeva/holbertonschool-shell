@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #init script
 PID_FILE="/var/run/my_process.pid"
-PROCESS_SCRIPT="/root/holbertonschool-shell/processes_and_signals/manage_my_process" 
+PROCESS_SCRIPT="./manage_my_process" 
 
 case "$1" in
     start)
@@ -12,11 +12,9 @@ case "$1" in
     stop)
         if [ -f "$PID_FILE" ]; then
             kill "$(cat $PID_FILE)" 2>/dev/null
-            rm -f "$PID_FILE"
-            echo "manage_my_process stopped"
-        else
-            echo "manage_my_process not running"
         fi
+        rm -f "$PID_FILE" 2>/dev/null
+        echo "manage_my_process stopped"
         ;;
     restart)
         if [ -f "$PID_FILE" ]; then

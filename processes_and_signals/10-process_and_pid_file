@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
-#process and pid file
-
-
+#script
 PIDFILE="/var/run/myscript.pid"
 
-
-if ! touch "$PIDFILE" 2>/dev/null; then
-    PIDFILE="/tmp/myscript.pid"
+# Make sure we can write the PID file or exit with error
+if ! echo $$ > "$PIDFILE"; then
+    echo "Cannot write to $PIDFILE. Are you running as root?" >&2
+    exit 1
 fi
-echo $$ > "$PIDFILE"
+
+# Define cleanup
+cleanup_and_exit() {
+    rm -f "$PIDFILE"
+    exit 0
+}
+
+# Handle signals
 handle_sigterm() {
     echo "I hate the kill command"
     cleanup_and_exit
@@ -22,16 +28,12 @@ handle_sigquit() {
     cleanup_and_exit
 }
 
-cleanup_and_exit() {
-    rm -f "$PIDFILE"
-    exit 0
-}
-
-
+# Trap signals
 trap handle_sigterm SIGTERM
 trap handle_sigint SIGINT
 trap handle_sigquit SIGQUIT
 
+# Infinite loop
 while true; do
     echo "To infinity and beyond"
     sleep 1
