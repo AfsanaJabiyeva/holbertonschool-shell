@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-
-# Kill proces
-
+#Kill proces
 PID=$(pgrep -f 7-highlander)
 kill -9 "$PID"
 
