@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #process and pid file
 file="/var/run/myscript.pid"
-echo $$ > "$file"
+echo $$ | sudo tee "$file" > /dev/null
 trap 'echo "I hate the kill command"' SIGTERM 
 trap 'echo "Y U no love me?!"' SIGINT 
 terminateItself() {
-	rm -rf file
+	rm -rf $file
 	exit 0
 }
 trap terminateItself SIGQUIT SIGTERM 
