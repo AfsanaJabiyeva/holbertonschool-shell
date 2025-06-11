@@ -1,18 +1,37 @@
 #!/usr/bin/env bash
 #process and pid file
-file="/var/run/myscript.pid"
-echo $$ | sudo tee "$file" > /dev/null
-trap 'echo "I hate the kill command"' SIGTERM 
-trap 'echo "Y U no love me?!"' SIGINT 
-terminateItself() {
-	rm -rf $file
-	exit 0
+
+
+
+PIDFILE="/var/run/myscript.pid"
+echo $$ > "$PIDFILE"
+
+handle_sigterm() {
+    echo "I hate the kill command"
+    cleanup_and_exit
 }
-trap terminateItself SIGQUIT SIGTERM 
+
+handle_sigint() {
+    echo "Y U no love me?!"
+}
+
+handle_sigquit() {
+    cleanup_and_exit
+}
+
+cleanup_and_exit() {
+    rm -f "$PIDFILE"
+    exit 0
+}
+
+trap handle_sigterm SIGTERM
+trap handle_sigint SIGINT
+trap handle_sigquit SIGQUIT
 
 
 while true; do
-	echo "To infinity and beyond"
-	sleep 2
+    echo "To infinity and beyond"
+    sleep 2
 done
+
 
